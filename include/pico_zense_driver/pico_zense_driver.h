@@ -28,6 +28,8 @@ namespace autolabor_driver {
 
         void publishColorImage();
 
+        void publishColorInfo();
+
         void publishDepthImage();
 
         void publishPointCloud();
@@ -36,13 +38,13 @@ namespace autolabor_driver {
 
     private:
         // ros components
-        ros::Publisher _color_image_pub, _depth_image_pub, _point_cloud_pub;
+        ros::Publisher _color_image_pub, _depth_image_pub, _point_cloud_pub , _color_info_pub;
         tf2_ros::StaticTransformBroadcaster _static_tf_broadcaster;
         // ros params
         int _device_index;
         std::string _namespace;
         std::string _frame_name;
-        bool _output_depth_image, _output_color_image, _output_point_cloud;
+        bool _output_depth_image, _output_color_image, _output_point_cloud , _output_color_info;
         int _read_frame_interval; // ms
         int _depth_range;
         bool _depth_spatial_filter, _depth_time_filter, _depth_distortion_correction, _depth_straighten_correction;
