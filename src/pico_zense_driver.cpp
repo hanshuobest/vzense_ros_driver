@@ -177,6 +177,7 @@ namespace autolabor_driver
 
     void PicoZenseDriver::publishColorInfo()
     {
+        std::cout << "step into publishColorInfo" << std::endl;
         sensor_msgs::CameraInfo cam_info;
 
         PsReturnStatus status;
@@ -188,7 +189,7 @@ namespace autolabor_driver
             return;
         }
 
-        ushort *resolution = new ushort[2];
+        u_int16_t *resolution = new u_int16_t[2];
         status = Ps2_GetRGBResolution(_device_handle, _session_index, resolution);
         if (status != PsRetOK)
         {
@@ -196,37 +197,40 @@ namespace autolabor_driver
             return;
         }
 
+        std::cout << "step 1 is ok-------------------\n";
+
         cam_info.width = resolution[0];
         cam_info.height = resolution[1];
         cam_info.header.frame_id = "camera_frame";
         cam_info.K.at(0) = camera_params.fx;
-        cam_info.K.at(1) = 0;
+        cam_info.K.at(1) = 0.0;
         cam_info.K.at(2) = camera_params.cx;
 
-        cam_info.K.at(3) = 0;
-        cam_info.k.at(4) = camera_params.fy;
+        cam_info.K.at(3) = 0.0;
+        cam_info.K.at(4) = camera_params.fy;
         cam_info.K.at(5) = camera_params.cy;
 
-        cam_info.K.at(6) = 0;
-        cam_info.K.at(7) = 0;
-        cam_info.K.at(8) = 1;
+        cam_info.K.at(6) = 0.0;
+        cam_info.K.at(7) = 0.0;
+        cam_info.K.at(8) = 1.0;
+        std::cout << "step 2 is ok-------------------\n";
 
         //------------------
         cam_info.P.at(0) = camera_params.fx;
-        cam_info.P.at(1) = 0;
+        cam_info.P.at(1) = 0.0;
         cam_info.P.at(2) = camera_params.cx;
-        cam_info.P.at(3) = 0;
+        cam_info.P.at(3) = 0.0;
 
-        cam_info.P.at(4) = 0;
+        cam_info.P.at(4) = 0.0;
         cam_info.P.at(5) = camera_params.fy;
         cam_info.P.at(6) = camera_params.cy;
-        cam_info.P.at(7) = 0;
+        cam_info.P.at(7) = 0.0;
 
-        cam_info.P.at(8) = 0;
-        cam_info.P.at(9) = 0;
-        cam_info.P.at(10) = 1;
-        cam_info.P.at(11) = 0;
-
+        cam_info.P.at(8) = 0.0;
+        cam_info.P.at(9) = 0.0;
+        cam_info.P.at(10) = 1.0;
+        cam_info.P.at(11) = 0.0;
+        std::cout << "step 3 is ok-------------------\n";
         //-----------------------
 
         cam_info.distortion_model = "equidistant";
@@ -241,12 +245,20 @@ namespace autolabor_driver
         cam_info.R.at(6) = 0.0;
         cam_info.R.at(7) = 0.0;
         cam_info.R.at(8) = 1.0;
+        std::cout << "step 4 is ok-------------------\n";
 
-        cam_info.D.at(0) = camera_params.k1;
-        cam_info.D.at(1) = camera_params.k2;
-        cam_info.D.at(2) = camera_params.p1;
-        cam_info.D.at(3) = camera_params.p2;
-        cam_info.D.at(4) = camera_params.k3;
+        // cam_info.D.at(0) = camera_params.k1;
+        // cam_info.D.at(1) = camera_params.k2;
+        // cam_info.D.at(2) = camera_params.p1;
+        // cam_info.D.at(3) = camera_params.p2;
+        // cam_info.D.at(4) = camera_params.k3;
+
+        // cam_info.D.at(0) = 0.0;
+        // cam_info.D.at(1) = 0.0;
+        // cam_info.D.at(2) = 0.0;
+        // cam_info.D.at(3) = 0.0;
+        // cam_info.D.at(4) = 0.0;
+        std::cout << "step 5 is ok-------------------\n";
 
         _color_info_pub.publish(cam_info);
     }
@@ -344,6 +356,7 @@ namespace autolabor_driver
                 if (Ps2_ReadNextFrame(_device_handle, _session_index, &ready_) == PsRetOK)
                 {
                     publishColorImage();
+                    std::cout << "------------------------------------------\n";
                     publishDepthImage();
                     publishPointCloud();
                     publishColorInfo();
