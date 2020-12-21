@@ -199,8 +199,8 @@ namespace autolabor_driver
 
         std::cout << "step 1 is ok-------------------\n";
 
-        cam_info.width = resolution[0];
-        cam_info.height = resolution[1];
+        cam_info.width = 640;
+        cam_info.height = 480;
         cam_info.header.frame_id = "camera_color_optical_frame";
         cam_info.K.at(0) = camera_params.fx;
         cam_info.K.at(1) = 0.0;
