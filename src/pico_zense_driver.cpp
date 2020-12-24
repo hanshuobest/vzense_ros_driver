@@ -43,7 +43,7 @@ namespace autolabor_driver
         private_nh.param<bool>("output_color_image", _output_color_image, false);
         if (_output_color_image)
         {
-            _color_image_pub = nh.advertise<sensor_msgs::Image>("color_image", 5);
+            _color_image_pub = nh.advertise<sensor_msgs::Image>("color_image", 10);
         }
         private_nh.param<bool>("output_color_info", _output_color_info, false);
         if (_output_color_info)
@@ -189,13 +189,13 @@ namespace autolabor_driver
             return;
         }
 
-        u_int16_t *resolution = new u_int16_t[2];
-        status = Ps2_GetRGBResolution(_device_handle, _session_index, resolution);
-        if (status != PsRetOK)
-        {
-            std::cerr << "Ps2_GetRGBResolution error: " << status << std::endl;
-            return;
-        }
+        //u_int16_t *resolution = new u_int16_t[2];
+        //status = Ps2_GetRGBResolution(_device_handle, _session_index, resolution);
+        //if (status != PsRetOK)
+        //{
+        //    std::cerr << "Ps2_GetRGBResolution error: " << status << std::endl;
+        //    return;
+        //}
 
         std::cout << "step 1 is ok-------------------\n";
 
@@ -247,7 +247,7 @@ namespace autolabor_driver
         cam_info.R.at(8) = 1.0;
         std::cout << "step 4 is ok-------------------\n";
         
-		cam_info.D.resize(5);
+	cam_info.D.resize(5);
         cam_info.D.at(0) = camera_params.k1;
         cam_info.D.at(1) = camera_params.k2;
         cam_info.D.at(2) = camera_params.p1;
@@ -348,8 +348,10 @@ namespace autolabor_driver
     void PicoZenseDriver::run()
     {
         initParams();
-        ros::Duration duration(_read_frame_interval / 1000.0);
-        if (initCamera())
+        //ros::Duration duration(_read_frame_interval / 1000.0);
+	//ros::Duration duration(0.01);
+	ros::Rate loop_rate(8);
+	if (initCamera())
         {
             publishTf();
             while (ros::ok())
@@ -358,11 +360,17 @@ namespace autolabor_driver
                 {
                     publishColorImage();
                     std::cout << "------------------------------------------\n";
-                    publishDepthImage();
-                    publishPointCloud();
+                    //publishDepthImage();
+                    //publishPointCloud();
                     publishColorInfo();
                 }
-                duration.sleep();
+		else
+		{
+			std::cout<< "failed!" << std::endl;
+		}
+                //duration.sleep();
+		//ros::spinOnce();
+		loop_rate.sleep();
             }
         }
     }
