@@ -43,7 +43,7 @@ namespace autolabor_driver
         private_nh.param<bool>("output_color_image", _output_color_image, false);
         if (_output_color_image)
         {
-            _color_image_pub = nh.advertise<sensor_msgs::Image>("color_image", 10);
+            _color_image_pub = nh.advertise<sensor_msgs::Image>("color_image", 8);
         }
         private_nh.param<bool>("output_color_info", _output_color_info, false);
         if (_output_color_info)
