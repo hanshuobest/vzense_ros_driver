@@ -248,17 +248,17 @@ namespace autolabor_driver
         std::cout << "step 4 is ok-------------------\n";
         
 		cam_info.D.resize(5);
-        //cam_info.D.at(0) = camera_params.k1;
-        //cam_info.D.at(1) = camera_params.k2;
-        //cam_info.D.at(2) = camera_params.p1;
-        //cam_info.D.at(3) = camera_params.p2;
-        //cam_info.D.at(4) = camera_params.k3;
+        cam_info.D.at(0) = camera_params.k1;
+        cam_info.D.at(1) = camera_params.k2;
+        cam_info.D.at(2) = camera_params.p1;
+        cam_info.D.at(3) = camera_params.p2;
+        cam_info.D.at(4) = camera_params.k3;
 
-        cam_info.D.at(0) = 0.0;
-        cam_info.D.at(1) = 0.0;
-        cam_info.D.at(2) = 0.0;
-        cam_info.D.at(3) = 0.0;
-        cam_info.D.at(4) = 0.0;
+        //cam_info.D.at(0) = 0.0;
+        //cam_info.D.at(1) = 0.0;
+        //cam_info.D.at(2) = 0.0;
+        //cam_info.D.at(3) = 0.0;
+        //cam_info.D.at(4) = 0.0;
         std::cout << "step 5 is ok-------------------\n";
 
         _color_info_pub.publish(cam_info);
