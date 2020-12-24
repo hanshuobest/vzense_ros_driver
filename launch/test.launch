@@ -8,13 +8,13 @@
       <param name="background_filter_threshold" value="20"/>
       <param name="skip_row" value="2"/>
       <param name="skip_column" value="2"/>
-      <param name="output_depth_image" value="true"/>
+      <param name="output_depth_image" value="false"/>
       <param name="output_color_image" value="true"/>
       <param name="output_color_info" value="true"/>
-      <param name="output_point_cloud" value="true"/>
-      <param name="depth_spatial_filter" value="true"/>
-      <param name="depth_time_filter" value="true"/>
-      <param name="depth_distortion_correction" value="true"/>
-      <param name="depth_straighten_correction" value="true"/>
+      <param name="output_point_cloud" value="false"/>
+      <param name="depth_spatial_filter" value="false"/>
+      <param name="depth_time_filter" value="false"/>
+      <param name="depth_distortion_correction" value="false"/>
+      <param name="depth_straighten_correction" value="false"/>
   </node>
 </launch>
