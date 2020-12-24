@@ -5,6 +5,34 @@
 #include "sensor_msgs/Image.h"
 #include "sensor_msgs/image_encodings.h"
 #include <sensor_msgs/CameraInfo.h>
+#include <chrono>
+#include <ctime>
+
+class Timer
+{
+    using Clock = std::chrono::high_resolution_clock;
+
+public:
+    /*! \brief start or restart timer */
+    inline void Tic()
+    {
+        start_ = Clock::now();
+    }
+    /*! \brief stop timer */
+    inline void Toc()
+    {
+        end_ = Clock::now();
+    }
+    /*! \brief return time in ms */
+    inline double Elasped()
+    {
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_ - start_);
+        return duration.count();
+    }
+
+private:
+    Clock::time_point start_, end_;
+};
 
 namespace autolabor_driver
 {
@@ -246,8 +274,8 @@ namespace autolabor_driver
         cam_info.R.at(7) = 0.0;
         cam_info.R.at(8) = 1.0;
         std::cout << "step 4 is ok-------------------\n";
-        
-	cam_info.D.resize(5);
+
+        cam_info.D.resize(5);
         cam_info.D.at(0) = camera_params.k1;
         cam_info.D.at(1) = camera_params.k2;
         cam_info.D.at(2) = camera_params.p1;
@@ -349,9 +377,9 @@ namespace autolabor_driver
     {
         initParams();
         //ros::Duration duration(_read_frame_interval / 1000.0);
-	//ros::Duration duration(0.01);
-	ros::Rate loop_rate(100);
-	if (initCamera())
+        //ros::Duration duration(0.01);
+        ros::Rate loop_rate(100);
+        if (initCamera())
         {
             publishTf();
 
@@ -365,13 +393,33 @@ namespace autolabor_driver
                     //publishPointCloud();
                     publishColorInfo();
                 }
-		else
-		{
-			std::cout<< "failed!" << std::endl;
-		}
+
+                Timer timer_obj;
+                timer_obj.Tic();
+                PsReturnStatus status = Ps2_ReadNextFrame(_device_handle, _session_index, &ready_);
+                timer_obj.Toc();
+
+                std::cout << "read frame cost time: " << timer_obj.Elasped() << std::endl;
+                if (status == PsRetOK)
+                {
+                    timer_obj.Tic();
+                    publishColorImage();
+                    timer_obj.Toc();
+                    std::cout << "publish color image cost time: " << timer_obj.Elasped() << std::endl;
+
+                    //publishDepthImage();
+                    //publishPointCloud();
+
+                    timer_obj.Tic();
+                    timer_obj.Toc();
+                    publishColorInfo();
+                    std::cout << "publish color info cost time: " << timer_obj.Elasped() << std::endl;
+
+                }
+
                 //duration.sleep();
-		ros::spinOnce();
-		loop_rate.sleep();
+                ros::spinOnce();
+                loop_rate.sleep();
             }
         }
     }
