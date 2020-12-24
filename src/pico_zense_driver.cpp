@@ -350,10 +350,11 @@ namespace autolabor_driver
         initParams();
         //ros::Duration duration(_read_frame_interval / 1000.0);
 	//ros::Duration duration(0.01);
-	ros::Rate loop_rate(8);
+	ros::Rate loop_rate(100);
 	if (initCamera())
         {
             publishTf();
+
             while (ros::ok())
             {
                 if (Ps2_ReadNextFrame(_device_handle, _session_index, &ready_) == PsRetOK)
@@ -369,7 +370,7 @@ namespace autolabor_driver
 			std::cout<< "failed!" << std::endl;
 		}
                 //duration.sleep();
-		//ros::spinOnce();
+		ros::spinOnce();
 		loop_rate.sleep();
             }
         }
