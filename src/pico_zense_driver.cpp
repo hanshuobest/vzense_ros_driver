@@ -385,14 +385,14 @@ namespace autolabor_driver
 
             while (ros::ok())
             {
-                if (Ps2_ReadNextFrame(_device_handle, _session_index, &ready_) == PsRetOK)
-                {
-                    publishColorImage();
-                    std::cout << "------------------------------------------\n";
-                    //publishDepthImage();
-                    //publishPointCloud();
-                    publishColorInfo();
-                }
+                // if (Ps2_ReadNextFrame(_device_handle, _session_index, &ready_) == PsRetOK)
+                // {
+                //     publishColorImage();
+                //     std::cout << "------------------------------------------\n";
+                //     //publishDepthImage();
+                //     //publishPointCloud();
+                //     publishColorInfo();
+                // }
 
                 Timer timer_obj;
                 timer_obj.Tic();
