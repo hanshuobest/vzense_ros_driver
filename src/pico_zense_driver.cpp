@@ -407,8 +407,8 @@ namespace autolabor_driver
                     timer_obj.Toc();
                     std::cout << "publish color image cost time: " << timer_obj.Elasped() << std::endl;
 
-                    //publishDepthImage();
-                    //publishPointCloud();
+                    publishDepthImage();
+                    publishPointCloud();
 
                     timer_obj.Tic();
                     timer_obj.Toc();
@@ -418,8 +418,8 @@ namespace autolabor_driver
                 }
 
                 //duration.sleep();
-                ros::spinOnce();
-                loop_rate.sleep();
+                //ros::spinOnce();
+                //loop_rate.sleep();
             }
         }
     }
