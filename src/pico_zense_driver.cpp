@@ -197,6 +197,8 @@ namespace autolabor_driver
             return;
         }
 
+        std::cout << "resolution[0]: " << resolution[0] << " resolution[1]: " << resolution[1] << std::endl;
+
         std::cout << "step 1 is ok-------------------\n";
 
         cam_info.width = 640;
