@@ -131,6 +131,8 @@ namespace autolabor_driver
             {
                 return true;
             }
+
+            
         }
         ROS_ERROR("Device number %d exceeds maximum", _device_index);
         return false;
@@ -282,11 +284,6 @@ namespace autolabor_driver
         cam_info.D.at(3) = camera_params.p2;
         cam_info.D.at(4) = camera_params.k3;
 
-        //cam_info.D.at(0) = 0.0;
-        //cam_info.D.at(1) = 0.0;
-        //cam_info.D.at(2) = 0.0;
-        //cam_info.D.at(3) = 0.0;
-        //cam_info.D.at(4) = 0.0;
         std::cout << "step 5 is ok-------------------\n";
 
         _color_info_pub.publish(cam_info);
@@ -385,14 +382,6 @@ namespace autolabor_driver
 
             while (ros::ok())
             {
-                // if (Ps2_ReadNextFrame(_device_handle, _session_index, &ready_) == PsRetOK)
-                // {
-                //     publishColorImage();
-                //     std::cout << "------------------------------------------\n";
-                //     //publishDepthImage();
-                //     //publishPointCloud();
-                //     publishColorInfo();
-                // }
 
                 Timer timer_obj;
                 timer_obj.Tic();
@@ -419,7 +408,7 @@ namespace autolabor_driver
 
                 //duration.sleep();
                 //ros::spinOnce();
-                //loop_rate.sleep();
+                loop_rate.sleep();
             }
         }
     }
