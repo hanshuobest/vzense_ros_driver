@@ -305,7 +305,10 @@ namespace autolabor_driver
 
         std::cout << "step 5 is ok-------------------\n";
 
-        _color_info_pub.publish(cam_info);
+        if(_output_color_info)
+        {
+            _color_info_pub.publish(cam_info);
+        }
     }
 
     void PicoZenseDriver::publishColorImage()
