@@ -132,7 +132,7 @@ namespace autolabor_driver
                 return true;
             }
 
-            
+
         }
         ROS_ERROR("Device number %d exceeds maximum", _device_index);
         return false;
@@ -219,13 +219,16 @@ namespace autolabor_driver
             return;
         }
 
-        //u_int16_t *resolution = new u_int16_t[2];
-        //status = Ps2_GetRGBResolution(_device_handle, _session_index, resolution);
-        //if (status != PsRetOK)
-        //{
-        //    std::cerr << "Ps2_GetRGBResolution error: " << status << std::endl;
-        //    return;
-        //}
+        u_int16_t *resolution = new u_int16_t[2];
+        status = Ps2_GetRGBResolution(_device_handle, _session_index, resolution);
+        if (status != PsRetOK)
+        {
+           std::cerr << "Ps2_GetRGBResolution error: " << status << std::endl;
+           return;
+        }
+
+        std::cout << "resolution[0]: " << resolution[0] << std::endl;
+        std::cout << "resolution[1]: " << resolution[1] << std::endl; 
 
         std::cout << "step 1 is ok-------------------\n";
 
