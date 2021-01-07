@@ -131,8 +131,6 @@ namespace autolabor_driver
             {
                 return true;
             }
-
-
         }
         ROS_ERROR("Device number %d exceeds maximum", _device_index);
         return false;
@@ -219,21 +217,39 @@ namespace autolabor_driver
             return;
         }
 
-        u_int16_t *resolution = new u_int16_t[2];
-        status = Ps2_GetRGBResolution(_device_handle, _session_index, resolution);
+        u_int16_t resolution;
+        status = Ps2_GetRGBResolution(_device_handle, _session_index, &resolution);
         if (status != PsRetOK)
         {
-           std::cerr << "Ps2_GetRGBResolution error: " << status << std::endl;
-           return;
+            std::cerr << "Ps2_GetRGBResolution error: " << status << std::endl;
+            return;
         }
 
-        std::cout << "resolution[0]: " << resolution[0] << std::endl;
-        std::cout << "resolution[1]: " << resolution[1] << std::endl; 
+        switch (resolution)
+        {
+        case 0:
+            cam_info.width = 1920;
+            cam_info.height = 1080;
+            break;
+        case 1:
+            cam_info.width = 1280;
+            cam_info.height = 720;
+            break;
+        case 2:
+            cam_info.width = 640;
+            cam_info.height = 480;
+            break;
+        case 3:
+            cam_info.width = 640;
+            cam_info.height = 360;
+            break;
+        }
 
         std::cout << "step 1 is ok-------------------\n";
 
-        cam_info.width = 640;
-        cam_info.height = 480;
+        // cam_info.width = 640;
+        // cam_info.height = 480;
+        
         cam_info.header.frame_id = "camera_color_optical_frame";
         cam_info.K.at(0) = camera_params.fx;
         cam_info.K.at(1) = 0.0;
@@ -406,7 +422,6 @@ namespace autolabor_driver
                     timer_obj.Toc();
                     publishColorInfo();
                     std::cout << "publish color info cost time: " << timer_obj.Elasped() << std::endl;
-
                 }
 
                 //duration.sleep();
