@@ -28,13 +28,13 @@ namespace autolabor_driver {
 
         void publishColorImage();
 
-        void publishColorInfo();
-
         void publishDepthImage();
 
         void publishPointCloud();
 
         void publishTf();
+
+        void publishColorInfo();
 
     private:
         // ros components
