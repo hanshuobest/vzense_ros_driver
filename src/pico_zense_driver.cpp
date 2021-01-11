@@ -273,6 +273,29 @@ namespace autolabor_driver {
             std::cerr << "Ps2_GetRGBResolution error: " << status << std::endl;
             return;
         }
+<<<<<<< HEAD
+=======
+
+        switch (resolution)
+        {
+        case 0:
+            cam_info.width = 1920;
+            cam_info.height = 1080;
+            break;
+        case 1:
+            cam_info.width = 1280;
+            cam_info.height = 720;
+            break;
+        case 2:
+            cam_info.width = 640;
+            cam_info.height = 480;
+            break;
+        case 3:
+            cam_info.width = 640;
+            cam_info.height = 360;
+            break;
+        }
+>>>>>>> abf88e6d4b13139dc7293e422582856a0c5a4498
 
         switch (resolution)
         {
@@ -294,7 +317,12 @@ namespace autolabor_driver {
             break;
         }
 
+<<<<<<< HEAD
         std::cout << "step 1 is ok-------------------\n";
+=======
+        // cam_info.width = 640;
+        // cam_info.height = 480;
+>>>>>>> abf88e6d4b13139dc7293e422582856a0c5a4498
         
         cam_info.header.frame_id = "camera_color_optical_frame";
         cam_info.K.at(0) = camera_params.fx;
@@ -352,6 +380,40 @@ namespace autolabor_driver {
         std::cout << "step 5 is ok-------------------\n";
 
         if(_output_color_info)
+<<<<<<< HEAD
+=======
+        {
+            _color_info_pub.publish(cam_info);
+        }
+    }
+
+    void PicoZenseDriver::publishColorImage()
+    {
+        if (_output_color_image && ready_.rgb &&
+            Ps2_GetFrame(_device_handle, _session_index, PsRGBFrame, &_color_frame) == PsRetOK)
+        {
+            sensor_msgs::Image img_msg;
+            img_msg.header.frame_id = _frame_name + "_color_frame";
+            img_msg.header.stamp = ros::Time::now();
+            img_msg.width = _color_frame.width;
+            img_msg.height = _color_frame.height;
+            img_msg.is_bigendian = false;
+            img_msg.encoding = sensor_msgs::image_encodings::BGR8;
+            img_msg.step = img_msg.width * 3;
+            int len = img_msg.width * img_msg.height * 3;
+            img_msg.data.resize(len);
+            for (int i = 0; i < len; i++)
+            {
+                img_msg.data[i] = _color_frame.pFrameData[i];
+            }
+            _color_image_pub.publish(img_msg);
+        }
+    }
+
+    void PicoZenseDriver::publishDepthImage()
+    {
+        if (_output_depth_image && ready_.depth &&
+            Ps2_GetFrame(_device_handle, _session_index, PsDepthFrame, &_depth_frame) == PsRetOK)
         {
             _color_info_pub.publish(cam_info);
         }
@@ -365,12 +427,35 @@ namespace autolabor_driver {
             publishTf();
             while (ros::ok()) {
                 if (Ps2_ReadNextFrame(_device_handle, _session_index, &ready_) == PsRetOK) {
+
+            while (ros::ok())
+            {
+
+                Timer timer_obj;
+                timer_obj.Tic();
+                PsReturnStatus status = Ps2_ReadNextFrame(_device_handle, _session_index, &ready_);
+                timer_obj.Toc();
+
+                std::cout << "read frame cost time: " << timer_obj.Elasped() << std::endl;
+                if (status == PsRetOK)
+                {
+                    timer_obj.Tic();
                     publishColorImage();
                     publishDepthImage();
                     publishPointCloud();
                     // publishColorInfo();
                 }
                 duration.sleep();
+
+                    timer_obj.Tic();
+                    timer_obj.Toc();
+                    publishColorInfo();
+                    std::cout << "publish color info cost time: " << timer_obj.Elasped() << std::endl;
+                }
+
+                //duration.sleep();
+                //ros::spinOnce();
+                loop_rate.sleep();
             }
         }
     }
